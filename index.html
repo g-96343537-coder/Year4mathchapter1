@@ -1,0 +1,304 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>四年级整数选择题练习</title>
+<style>
+body {
+    font-family: 'Microsoft YaHei', sans-serif;
+    background: linear-gradient(to bottom, rgba(255, 248, 240, 0.8), rgba(255, 230, 204, 0.8)), url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="100" height="100" viewBox="0 0 100 100"><rect width="100" height="100" fill="%23f5f5f5"/><path d="M0 0L100 100M100 0L0 100" stroke="%23e6e6e6" stroke-width="1"/></svg>');
+    margin: 0;
+    padding: 0;
+    display: flex;
+    justify-content: center;
+    min-height: 100vh;
+}
+.container {
+    width: 100%;
+    max-width: 500px;
+    padding: 15px;
+    box-sizing: border-box;
+}
+.header {
+    text-align: center;
+    margin-bottom: 20px;
+    position: relative;
+}
+h1 {
+    color: #e67e22;
+    font-size: 24px;
+    margin-bottom: 5px;
+    text-shadow: 1px 1px 2px rgba(0,0,0,0.1);
+}
+.progress-bar {
+    height: 8px;
+    background-color: #f0f0f0;
+    border-radius: 4px;
+    margin: 10px 0;
+    overflow: hidden;
+}
+.progress {
+    height: 100%;
+    background-color: #e67e22;
+    width: 0%;
+    transition: width 0.5s ease;
+}
+.progress-text {
+    text-align: center;
+    font-size: 14px;
+    color: #666;
+    margin-bottom: 10px;
+}
+.question {
+    background: #fff;
+    padding: 20px;
+    margin: 15px 0;
+    border-radius: 15px;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+    transition: transform 0.3s, box-shadow 0.3s;
+    border-left: 5px solid #e67e22;
+}
+.question:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 6px 20px rgba(0,0,0,0.15);
+}
+.question-number {
+    font-weight: bold;
+    color: #e67e22;
+    margin-bottom: 10px;
+    font-size: 16px;
+}
+button.option-btn {
+    display: block;
+    width: 100%;
+    padding: 14px;
+    margin: 10px 0;
+    background-color: #ffa64d;
+    border: none;
+    border-radius: 10px;
+    color: #fff;
+    font-size: 16px;
+    cursor: pointer;
+    text-align: left;
+    transition: all 0.3s;
+    position: relative;
+    overflow: hidden;
+}
+button.option-btn:before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
+    transition: left 0.5s;
+}
+button.option-btn:hover:before {
+    left: 100%;
+}
+button.option-btn:hover {
+    background-color: #ff9933;
+    transform: translateX(5px);
+}
+button.option-btn:active {
+    transform: scale(0.98);
+}
+button.option-btn.correct {
+    background-color: #2ecc71 !important;
+    color: #fff;
+    animation: pulse 0.5s;
+}
+button.option-btn.wrong {
+    background-color: #e74c3c !important;
+    color: #fff;
+    animation: shake 0.5s;
+}
+@keyframes pulse {
+    0% { transform: scale(1); }
+    50% { transform: scale(1.05); }
+    100% { transform: scale(1); }
+}
+@keyframes shake {
+    0%, 100% { transform: translateX(0); }
+    10%, 30%, 50%, 70%, 90% { transform: translateX(-5px); }
+    20%, 40%, 60%, 80% { transform: translateX(5px); }
+}
+.correct, .wrong {
+    font-weight: bold;
+    margin-top: 10px;
+    padding: 10px;
+    border-radius: 5px;
+    text-align: center;
+}
+.correct { 
+    background-color: rgba(46, 204, 113, 0.1);
+    color: #27ae60;
+    border: 1px solid #2ecc71;
+}
+.wrong { 
+    background-color: rgba(231, 76, 60, 0.1);
+    color: #c0392b;
+    border: 1px solid #e74c3c;
+}
+.hidden { display: none; }
+#result {
+    text-align: center;
+    background: #fff;
+    padding: 30px;
+    border-radius: 15px;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+    margin-top: 20px;
+}
+#result h2 { 
+    color: #e67e22; 
+    margin-top: 0;
+}
+.score-display {
+    font-size: 48px;
+    font-weight: bold;
+    color: #e67e22;
+    margin: 20px 0;
+}
+.score-message {
+    font-size: 18px;
+    margin: 15px 0;
+}
+.restart-btn {
+    background-color: #e67e22;
+    color: white;
+    border: none;
+    padding: 12px 25px;
+    border-radius: 30px;
+    font-size: 16px;
+    cursor: pointer;
+    transition: all 0.3s;
+    margin-top: 15px;
+}
+.restart-btn:hover {
+    background-color: #d35400;
+    transform: scale(1.05);
+}
+</style>
+</head>
+<body>
+<div class="container">
+    <div class="header">
+        <h1>四年级整数选择题练习</h1>
+        <div class="progress-bar">
+            <div class="progress" id="progress"></div>
+        </div>
+        <div class="progress-text" id="progress-text">第 1 题 / 共 20 题</div>
+    </div>
+    <div id="quiz"></div>
+    <div id="result" class="hidden">
+        <h2>练习完成！</h2>
+        <div class="score-display" id="score">0</div>
+        <div class="score-message" id="score-message"></div>
+        <button class="restart-btn" onclick="restartQuiz()">重新开始练习</button>
+    </div>
+</div>
+
+<script>
+const questions = [
+    {q:"24678 的千位近似值是？", options:["24000","24600","25000","24500"], a:"25000"},
+    {q:"87492 的万位近似值是？", options:["80000","87000","90000","87500"], a:"90000"},
+    {q:"56321 的十位近似值是？", options:["56320","56300","56310","56400"], a:"56320"},
+    {q:"99876 的百位近似值是？", options:["99900","99800","99876","99976"], a:"99900"},
+    {q:"数字 53729 中十位上的数是？", options:["2","7","3","9"], a:"2"},
+    {q:"数字 46805 中万位上的数是？", options:["4","6","8","5"], a:"4"},
+    {q:"数字 82413 中，个位、十位、百位分别是？", options:["3,1,4","4,1,3","3,4,1","1,3,4"], a:"3,1,4"},
+    {q:"数字 69247 的千位和百位数字的和是？", options:["11","10","9","12"], a:"11"},
+    {q:"下列数字中哪一个最大？", options:["32678","29876","33245","31999"], a:"33245"},
+    {q:"下列数字中哪一个最小？", options:["45120","44999","45001","45010"], a:"44999"},
+    {q:"64231 与 63987 比较，哪个数更大？", options:["64231","63987","一样大","都不对"], a:"64231"},
+    {q:"27896 + 4213 与 31998 比较，哪个数更大？", options:["31209","31998","都一样","不确定"], a:"31209"},
+    {q:"写出下列数列的下一个数字：5,10,15,20,？", options:["25","30","24","22"], a:"25"},
+    {q:"写出下列数列的下一个数字：98765,98760,98755,？", options:["98750","98745","98760","98755"], a:"98750"},
+    {q:"完成数列：2,4,6,8,?,?,?", options:["10,12,14","9,11,13","10,11,12","8,10,12"], a:"10,12,14"},
+    {q:"判断 48327 是奇数还是偶数？", options:["奇数","偶数","都不是","无法判断"], a:"奇数"},
+    {q:"判断 60182 是奇数还是偶数？", options:["奇数","偶数","都不是","无法判断"], a:"偶数"},
+    {q:"写出 99995 之后的三个连续偶数。", options:["99996,99998,100000","99996,99997,99998","100000,100002,100004","99996,99998,100002"], a:"99996,99998,100000"},
+    {q:"在 30000 到 40000 之间，找出三个能被 5 整除的数。", options:["30000,30005,30010","30001,30006,30011","30000,30010,30020","30005,30010,30015"], a:"30000,30005,30010"},
+    {q:"小明从 12345 开始，每次加 10，他连续写了 5 个数字，写出来的是哪些数字？", options:["12345,12355,12365,12375,12385","12345,12355,12365,12375,12395","12345,12350,12355,12360,12365","12340,12350,12360,12370,12380"], a:"12345,12355,12365,12375,12385"}
+];
+
+let current = 0;
+let score = 0;
+
+function showQuestion(index) {
+    const qDiv = document.getElementById('quiz');
+    const progress = document.getElementById('progress');
+    const progressText = document.getElementById('progress-text');
+    
+    // 更新进度条
+    progress.style.width = `${(index / questions.length) * 100}%`;
+    progressText.textContent = `第 ${index + 1} 题 / 共 ${questions.length} 题`;
+    
+    let html = `<div class="question"><div class="question-number">第 ${index + 1} 题</div><p>${questions[index].q}</p>`;
+    questions[index].options.forEach(opt => {
+        html += `<button class="option-btn" onclick="checkAnswer(this,'${opt}')">${opt}</button>`;
+    });
+    html += `<div id="feedback"></div></div>`;
+    qDiv.innerHTML = html;
+}
+
+function checkAnswer(btn, opt) {
+    const feedback = document.getElementById('feedback');
+    const buttons = document.querySelectorAll('.option-btn');
+    buttons.forEach(b => b.disabled = true); // 禁用所有选项
+    
+    if (opt === questions[current].a) {
+        btn.classList.add('correct');
+        feedback.innerHTML = "<div class='correct'>✔ 正确！太棒了！</div>";
+        score++;
+    } else {
+        btn.classList.add('wrong');
+        feedback.innerHTML = `<div class='wrong'>✖ 错误，正确答案是：${questions[current].a}</div>`;
+        // 标记正确答案
+        buttons.forEach(b => {
+            if (b.textContent === questions[current].a) b.classList.add('correct');
+        });
+    }
+    
+    current++;
+    if (current < questions.length) {
+        setTimeout(() => showQuestion(current), 1500);
+    } else {
+        setTimeout(showResult, 1500);
+    }
+}
+
+function showResult() {
+    document.getElementById('quiz').classList.add('hidden');
+    document.getElementById('result').classList.remove('hidden');
+    document.getElementById('score').textContent = score;
+    
+    const scoreMessage = document.getElementById('score-message');
+    const percentage = (score / questions.length) * 100;
+    
+    if (percentage >= 90) {
+        scoreMessage.textContent = "太棒了！你是个数学小天才！";
+    } else if (percentage >= 70) {
+        scoreMessage.textContent = "做得很好！继续加油！";
+    } else if (percentage >= 50) {
+        scoreMessage.textContent = "还不错，再多练习会更好！";
+    } else {
+        scoreMessage.textContent = "继续努力，相信你会进步很快！";
+    }
+}
+
+function restartQuiz() {
+    current = 0;
+    score = 0;
+    document.getElementById('result').classList.add('hidden');
+    document.getElementById('quiz').classList.remove('hidden');
+    showQuestion(current);
+}
+
+// 初始化显示第一题
+showQuestion(current);
+</script>
+</body>
+</html>
